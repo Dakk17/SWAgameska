@@ -11,16 +11,15 @@ if ($conn->connect_error) {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-$name = $data['name'];
-$userId = $data['userId'];
+$username = $data['username'];
+$password = password_hash($data['password'], PASSWORD_BCRYPT);
 
-$sql = "INSERT INTO characters (name, health, userId) VALUES ('$name', 100, $userId)";
+$sql = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
 
 if ($conn->query($sql) === TRUE) {
-    $characterId = $conn->insert_id;
-    echo json_encode(array("character" => array("id" => $characterId, "name" => $name, "health" => 100)));
+    echo json_encode(array("success" => true, "message" => "Registration successful"));
 } else {
-    echo json_encode(array("message" => "Error: " . $sql . "<br>" . $conn->error));
+    echo json_encode(array("success" => false, "message" => "Error: " . $sql . "<br>" . $conn->error));
 }
 
 $conn->close();

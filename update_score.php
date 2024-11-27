@@ -11,14 +11,17 @@ if ($conn->connect_error) {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-$name = $data['name'];
-$userId = $data['userId'];
+$characterId = $data['characterId'];
+$isWin = $data['isWin'];
 
-$sql = "INSERT INTO characters (name, health, userId) VALUES ('$name', 100, $userId)";
+if ($isWin) {
+    $sql = "UPDATE characters SET points = points + 10 WHERE id = $characterId";
+} else {
+    $sql = "UPDATE characters SET points = points - 5 WHERE id = $characterId";
+}
 
 if ($conn->query($sql) === TRUE) {
-    $characterId = $conn->insert_id;
-    echo json_encode(array("character" => array("id" => $characterId, "name" => $name, "health" => 100)));
+    echo json_encode(array("message" => "Score updated successfully"));
 } else {
     echo json_encode(array("message" => "Error: " . $sql . "<br>" . $conn->error));
 }

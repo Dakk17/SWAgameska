@@ -1,8 +1,71 @@
+document.getElementById('register').addEventListener('click', registerUser);
+document.getElementById('login').addEventListener('click', loginUser);
+document.getElementById('logout').addEventListener('click', logoutUser);
 document.getElementById('create-character').addEventListener('click', createCharacter);
 document.getElementById('attack').addEventListener('click', attack);
 
+let currentUser = null;
 let character = null;
 let enemy = null;
+
+function registerUser() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    fetch('register.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Registration successful!');
+        } else {
+            alert('Registration failed: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function loginUser() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    fetch('login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            currentUser = data.user;
+            alert('Login successful!');
+        } else {
+            alert('Login failed: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function logoutUser() {
+    fetch('logout.php', {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            currentUser = null;
+            alert('Logout successful!');
+        } else {
+            alert('Logout failed: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
 function createCharacter() {
     const name = document.getElementById('character-name').value;
@@ -11,7 +74,7 @@ function createCharacter() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: name }),
+        body: JSON.stringify({ name: name, userId: currentUser.id }),
     })
     .then(response => response.json())
     .then(data => {
@@ -33,26 +96,35 @@ function loadEnemy() {
 }
 
 function attack() {
-    fetch('attack.php', {
+    const characterDamage = Math.floor(Math.random() * 30) + 10;
+    const enemyDamage = Math.floor(Math.random() * 30) + 10;
+
+    character.health -= enemyDamage;
+    enemy.health -= characterDamage;
+
+    document.getElementById('character-info').innerText = `Character: ${character.name}, Health: ${character.health}`;
+    document.getElementById('enemy-info').innerText = `Enemy: ${enemy.name}, Health: ${enemy.health}`;
+
+    if (enemy.health <= 0) {
+        alert('You won!');
+        updateScore(true);
+    } else if (character.health <= 0) {
+        alert('You lost!');
+        updateScore(false);
+    }
+}
+
+function updateScore(isWin) {
+    fetch('update_score.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ characterId: character.id, enemyId: enemy.id }),
+        body: JSON.stringify({ characterId: character.id, isWin: isWin }),
     })
     .then(response => response.json())
     .then(data => {
-        character = data.character;
-        enemy = data.enemy;
-        document.getElementById('character-info').innerText = `Character: ${character.name}, Health: ${character.health}`;
-        document.getElementById('enemy-info').innerText = `Enemy: ${enemy.name}, Health: ${enemy.health}`;
-        if (enemy.health <= 0) {
-            alert('You won!');
-            loadScoreboard();
-        } else if (character.health <= 0) {
-            alert('You lost!');
-            loadScoreboard();
-        }
+        loadScoreboard();
     })
     .catch(error => console.error('Error:', error));
 }
