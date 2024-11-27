@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -20,6 +21,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
     if (password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['id'];
         echo json_encode(array("success" => true, "user" => $user));
     } else {
         echo json_encode(array("success" => false, "message" => "Invalid password"));

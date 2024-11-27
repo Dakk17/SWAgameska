@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -12,7 +13,7 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 $name = $data['name'];
-$userId = $data['userId'];
+$userId = $_SESSION['user_id'];
 
 $sql = "INSERT INTO characters (name, health, userId) VALUES ('$name', 100, $userId)";
 

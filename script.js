@@ -44,6 +44,10 @@ function loginUser() {
         if (data.success) {
             currentUser = data.user;
             alert('Login successful!');
+            document.getElementById('character-form').style.display = 'block';
+            document.getElementById('game-area').style.display = 'block';
+            document.getElementById('scoreboard').style.display = 'block';
+            loadScoreboard();
         } else {
             alert('Login failed: ' + data.message);
         }
@@ -60,6 +64,12 @@ function logoutUser() {
         if (data.success) {
             currentUser = null;
             alert('Logout successful!');
+            document.getElementById('character-form').style.display = 'none';
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('scoreboard').style.display = 'none';
+            document.getElementById('character-info').innerText = '';
+            document.getElementById('enemy-info').innerText = '';
+            document.getElementById('score-list').innerHTML = '';
         } else {
             alert('Logout failed: ' + data.message);
         }
@@ -130,7 +140,13 @@ function updateScore(isWin) {
 }
 
 function loadScoreboard() {
-    fetch('load_scoreboard.php')
+    fetch('load_scoreboard.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: currentUser.id }),
+    })
     .then(response => response.json())
     .then(data => {
         const scoreList = document.getElementById('score-list');

@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -10,7 +11,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT name, points FROM characters ORDER BY points DESC";
+$data = json_decode(file_get_contents('php://input'), true);
+$userId = $data['userId'];
+
+$sql = "SELECT name, points FROM characters WHERE userId = $userId ORDER BY points DESC";
 $result = $conn->query($sql);
 
 $scores = array();
