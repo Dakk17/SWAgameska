@@ -20,11 +20,7 @@ function registerUser() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            alert('Registration successful!');
-        } else {
-            alert('Registration failed: ' + data.message);
-        }
+        showMessage(data.message);
     })
     .catch(error => console.error('Error:', error));
 }
@@ -43,13 +39,13 @@ function loginUser() {
     .then(data => {
         if (data.success) {
             currentUser = data.user;
-            alert('Login successful!');
+            showMessage('Login successful!');
             document.getElementById('character-form').style.display = 'block';
             document.getElementById('game-area').style.display = 'block';
             document.getElementById('scoreboard').style.display = 'block';
             loadScoreboard();
         } else {
-            alert('Login failed: ' + data.message);
+            showMessage(data.message);
         }
     })
     .catch(error => console.error('Error:', error));
@@ -63,7 +59,7 @@ function logoutUser() {
     .then(data => {
         if (data.success) {
             currentUser = null;
-            alert('Logout successful!');
+            showMessage('Logout successful!');
             document.getElementById('character-form').style.display = 'none';
             document.getElementById('game-area').style.display = 'none';
             document.getElementById('scoreboard').style.display = 'none';
@@ -71,7 +67,7 @@ function logoutUser() {
             document.getElementById('enemy-info').innerText = '';
             document.getElementById('score-list').innerHTML = '';
         } else {
-            alert('Logout failed: ' + data.message);
+            showMessage(data.message);
         }
     })
     .catch(error => console.error('Error:', error));
@@ -106,23 +102,44 @@ function loadEnemy() {
 }
 
 function attack() {
-    const characterDamage = Math.floor(Math.random() * 30) + 10;
-    const enemyDamage = Math.floor(Math.random() * 30) + 10;
+    fetch('attack.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ characterId: character.id, enemyId: enemy.id }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        character.health = data.characterHealth;
+        enemy.health = data.enemyHealth;
 
-    character.health -= enemyDamage;
-    enemy.health -= characterDamage;
+        document.getElementById('character-info').innerText = `Character: ${character.name}, Health: ${character.health}`;
+        document.getElementById('enemy-info').innerText = `Enemy: ${enemy.name}, Health: ${enemy.health}`;
 
-    document.getElementById('character-info').innerText = `Character: ${character.name}, Health: ${character.health}`;
-    document.getElementById('enemy-info').innerText = `Enemy: ${enemy.name}, Health: ${enemy.health}`;
-
-    if (enemy.health <= 0) {
-        alert('You won!');
-        updateScore(true);
-    } else if (character.health <= 0) {
-        alert('You lost!');
-        updateScore(false);
-    }
+        if (enemy.health <= 0) {
+            alert('You won!');
+            updateScore(true);
+            resetBattle();
+        } else if (character.health <= 0) {
+            alert('You lost!');
+            updateScore(false);
+            resetBattle();
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
+
+function resetBattle() {
+    // Reset character health
+    character.health = 100;
+    document.getElementById('character-info').innerText = `Character: ${character.name}, Health: ${character.health}`;
+
+    // Load new enemy
+    loadEnemy();
+}
+
+
 
 function updateScore(isWin) {
     fetch('update_score.php', {
@@ -158,4 +175,13 @@ function loadScoreboard() {
         });
     })
     .catch(error => console.error('Error:', error));
+}
+
+function showMessage(message) {
+    const messageElement = document.getElementById('message');
+    messageElement.innerText = message;
+    messageElement.classList.add('show');
+    setTimeout(() => {
+        messageElement.classList.remove('show');
+    }, 3000);
 }
