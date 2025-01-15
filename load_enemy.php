@@ -1,14 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rpg_game";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'logins.php';
 
 $sql = "SELECT * FROM enemies ORDER BY RAND() LIMIT 1";
 $result = $conn->query($sql);

@@ -21,8 +21,10 @@ function registerUser() {
     .then(response => response.json())
     .then(data => {
         showMessage(data.message);
+        console.log(JSON.stringify({ username, password }));
     })
     .catch(error => console.error('Error:', error));
+    console.log(JSON.stringify({ username, password }));
 }
 
 function loginUser() {

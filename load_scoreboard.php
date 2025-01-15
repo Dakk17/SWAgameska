@@ -1,15 +1,6 @@
 <?php
 session_start();
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rpg_game";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'logins.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 

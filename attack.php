@@ -1,14 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rpg_game";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'logins.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -45,19 +36,10 @@ if (isset($data['characterId']) && isset($data['enemyId'])) {
 
             echo json_encode(array("characterHealth" => $newCharacterHealth, "enemyHealth" => $newEnemyHealth));
         } else {
-            // Reset character health
             $updateCharacterSql = "UPDATE characters SET health = 100 WHERE id = $characterId";
             $conn->query($updateCharacterSql);
-
-            // Load new enemy
-            $newEnemySql = "SELECT * FROM enemies ORDER BY RAND() LIMIT 1";
-            $newEnemyResult = $conn->query($newEnemySql);
-            if ($newEnemyResult->num_rows > 0) {
-                $newEnemy = $newEnemyResult->fetch_assoc();
-                echo json_encode(array("characterHealth" => 100, "enemyHealth" => $newEnemy['health'], "newEnemy" => $newEnemy));
-            } else {
-                echo json_encode(array("message" => "No enemies found"));
-            }
+            $updateEnemySql = "UPDATE enemies SET health = 100 WHERE id = $enemyId";
+            $conn->query($updateEnemySql);
         }
     } else {
         echo json_encode(array("message" => "Character or enemy not found"));
