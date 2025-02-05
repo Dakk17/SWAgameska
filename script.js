@@ -11,6 +11,9 @@ let enemy = null;
 function registerUser() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    console.log("Username:", username);
+    console.log("Password:", password);
+
     fetch('register.php', {
         method: 'POST',
         headers: {
@@ -18,14 +21,23 @@ function registerUser() {
         },
         body: JSON.stringify({ username: username, password: password }),
     })
-    .then(response => response.json())
+    .then(response => response.text())
+    .then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (error) {
+            console.error('Invalid JSON:', text);
+            throw error;
+        }
+    })
+    
     .then(data => {
+        console.log("Response data:", data);
         showMessage(data.message);
-        console.log(JSON.stringify({ username, password }));
     })
     .catch(error => console.error('Error:', error));
-    console.log(JSON.stringify({ username, password }));
 }
+
 
 function loginUser() {
     const username = document.getElementById('username').value;
@@ -133,11 +145,9 @@ function attack() {
 }
 
 function resetBattle() {
-    // Reset character health
     character.health = 100;
     document.getElementById('character-info').innerText = `Character: ${character.name}, Health: ${character.health}`;
 
-    // Load new enemy
     loadEnemy();
 }
 
