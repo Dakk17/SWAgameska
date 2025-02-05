@@ -53,11 +53,13 @@ Slouží k ukládání informací o postavách a nepřátelích. Obsahuje tabulk
 > Ujistěte se, že soubor `config.php` obsahuje správné přihlašovací údaje k databázi.
 > Nepoužívejte slabá hesla pro připojení k databázi.
 
-> [!IMPORTANT] Bezpečnostní tipy
+> [!IMPORTANT]
+> Bezpečnostní tipy
 > V produkčním prostředí skryjte chybové výpisy PHP pomocí `error_reporting(0);`.
 > Používejte připravené dotazy v SQL, aby se zabránilo SQL injection.
 
-> [!TIP] Užitečné rady
+> [!TIP]
+> Užitečné rady
 > Pokud se hra nechová podle očekávání, zkontrolujte konzoli prohlížeče (F12 > Console).
 > Pro ladění PHP můžete použít `error_log` nebo `var_dump()`.
 
