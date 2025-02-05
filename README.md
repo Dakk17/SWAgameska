@@ -41,7 +41,7 @@ Slouží k ukládání informací o postavách a nepřátelích. Obsahuje tabulk
 ## Instalace a spuštění
 1. Naklonujte tento repozitář:
    ```sh
-   git clone https://github.com/uzivatel/rpg-hra.git
+   git clone https://github.com/Dakk17/SWAgameska.git
    ```
 2. Nahrajte soubory na server s podporou PHP a MySQL.
 3. Vytvořte databázi a importujte soubor `database.sql`.
