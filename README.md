@@ -48,7 +48,8 @@ Slouží k ukládání informací o postavách a nepřátelích. Obsahuje tabulk
 4. Upravte soubor `config.php` s přihlašovacími údaji k databázi.
 5. Spusťte projekt v prohlížeči.
 
-> [!WARNING] Důležité upozornění!
+> [!WARNING]
+> Důležité upozornění!
 > Ujistěte se, že soubor `config.php` obsahuje správné přihlašovací údaje k databázi.
 > Nepoužívejte slabá hesla pro připojení k databázi.
 
