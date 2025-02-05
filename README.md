@@ -44,7 +44,7 @@ Slouží k ukládání informací o postavách a nepřátelích. Obsahuje tabulk
    git clone https://github.com/Dakk17/SWAgameska.git
    ```
 2. Nahrajte soubory na server s podporou PHP a MySQL.
-3. Vytvořte databázi a importujte soubor `RPGgame.sql`.
+3. Vytvořte databázi a importujte soubor `rpg_game.sql`.
 4. Upravte soubor `logins.php` s přihlašovacími údaji k databázi.
 5. Spusťte projekt v prohlížeči.
 
