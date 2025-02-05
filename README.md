@@ -45,12 +45,12 @@ Slouží k ukládání informací o postavách a nepřátelích. Obsahuje tabulk
    ```
 2. Nahrajte soubory na server s podporou PHP a MySQL.
 3. Vytvořte databázi a importujte soubor `database.sql`.
-4. Upravte soubor `config.php` s přihlašovacími údaji k databázi.
+4. Upravte soubor `logins.php` s přihlašovacími údaji k databázi.
 5. Spusťte projekt v prohlížeči.
 
 > [!WARNING]
 > Důležité upozornění!
-> Ujistěte se, že soubor `config.php` obsahuje správné přihlašovací údaje k databázi.
+> Ujistěte se, že soubor `logins.php` obsahuje správné přihlašovací údaje k databázi.
 > Nepoužívejte slabá hesla pro připojení k databázi.
 
 > [!IMPORTANT]
